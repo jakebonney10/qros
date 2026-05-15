@@ -420,13 +420,13 @@ QVariant QRosNode::paramValueToQVariant(const rclcpp::Parameter &param)
   case rclcpp::ParameterType::PARAMETER_STRING_ARRAY:
     return arrayToVariantList(param);
   case rclcpp::ParameterType::PARAMETER_NOT_SET:
-    RCLCPP_ERROR(node_ptr_->get_logger(), "Parameter not set");
-    break;
+    RCLCPP_DEBUG(node_ptr_->get_logger(), "Parameter not set");
+    return QVariant();
   default:
     RCLCPP_ERROR(node_ptr_->get_logger(),
                  "Unhandled parameter array type: %s ",
                  param.get_type_name().c_str());
-    break;
+    return QVariant();
   }
 }
 
