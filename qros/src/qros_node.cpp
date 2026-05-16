@@ -74,13 +74,15 @@ rclcpp::ParameterValue QRosNode::paramValueFromQVariant(const QVariant &value)
   rclcpp::ParameterValue param_value;
   auto type = value.type();
   if (type == QVariant::List || type ==QVariant::UserType) {
-    // Handle lists which can represent vectors
     QVariantList list = value.toList();
     if (!list.isEmpty()) {
       switch (list.first().type()) {
-      case QVariant::Int: {
-        std::vector<int> int_array;
-        for (const QVariant &item : list) int_array.push_back(item.toInt());
+      case QVariant::Int:
+      case QVariant::UInt:
+      case QVariant::LongLong:
+      case QVariant::ULongLong: {
+        std::vector<int64_t> int_array;
+        for (const QVariant &item : list) int_array.push_back(item.toLongLong());
         param_value = rclcpp::ParameterValue(int_array);
         break;}
       case QVariant::Double:{
@@ -101,10 +103,12 @@ rclcpp::ParameterValue QRosNode::paramValueFromQVariant(const QVariant &value)
       }
     }
   } else {
-    // Handle scalar types
     switch (value.type()) {
     case QVariant::Int:
-      param_value = rclcpp::ParameterValue(value.toInt());
+    case QVariant::UInt:
+    case QVariant::LongLong:
+    case QVariant::ULongLong:
+      param_value = rclcpp::ParameterValue(static_cast<int64_t>(value.toLongLong()));
       break;
     case QVariant::Double:
       param_value = rclcpp::ParameterValue(value.toDouble());
