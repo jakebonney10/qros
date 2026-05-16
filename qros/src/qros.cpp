@@ -60,6 +60,9 @@ void registerQmlTypes(){
   REGISTER_QML_TYPE(QRosDiagnosticTask)
   REGISTER_QML_TYPE(QRosDiagnosticsUpdater)
 
+  // rcl_interfaces
+  REGISTER_QML_TYPE(QRosRosoutAggregator)
+
   // custom msgs (roship)
   REGISTER_QML_TYPE(QRosValvePublisher)
   REGISTER_QML_TYPE(QRosValveStampedPublisher)
