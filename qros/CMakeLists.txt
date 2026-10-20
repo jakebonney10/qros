@@ -63,6 +63,10 @@ foreach(DEPEND ${ROS_DEPENDS} ${EXTERNAL_DEPENDS})
   find_package(${DEPEND} REQUIRED)
 endforeach()
 
+foreach(DEPEND ${ROS_DEPENDS})
+  list(APPEND ROS_DEPENDS_TARGETS ${${DEPEND}_TARGETS})
+endforeach(DEPEND)
+
 ################
 ## Find files ##
 ################
@@ -133,7 +137,7 @@ target_include_directories(${PROJECT_NAME}
     $<INSTALL_INTERFACE:include>
 )
 
-ament_target_dependencies(${PROJECT_NAME} ${ROS_DEPENDS})
+target_link_libraries(${PROJECT_NAME} ${ROS_DEPENDS_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${EXTERNAL_DEPENDS_LIB})
 
 # Export so downstream packages can link to your library if they want
@@ -160,7 +164,7 @@ foreach(NODE_FILE ${NODES})
       ${CMAKE_CURRENT_SOURCE_DIR}/include
   )
 
-  ament_target_dependencies(${NODE_NAME} ${ROS_DEPENDS})
+  target_link_libraries(${NODE_NAME} ${ROS_DEPENDS_TARGETS})
 
   # Link the common library (this is the big RAM/perf fix)
   target_link_libraries(${NODE_NAME}
